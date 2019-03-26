@@ -229,9 +229,10 @@ def craiglockhart_to_sighthill
   # stop for the transfer, and the bus no. and company for the second bus.
   execute(<<-SQL)
     SELECT
+      DISTINCT
       first_start.num,
       first_start.company,
-      first_end.stop_id,
+      middle_stops.name,
       second_end.num,
       second_end.company
     FROM
@@ -251,8 +252,10 @@ def craiglockhart_to_sighthill
     JOIN 
       stops AS second_stops
     ON second_end.stop_id = second_stops.id
+    JOIN stops AS middle_stops
+    ON first_end.stop_id = middle_stops.id
     WHERE
-      first_stops.name = 'Craiglockhard' AND second_stops.name = 'Sighthill'
+      first_stops.name = 'Craiglockhart' AND second_stops.name = 'Sighthill'
 
   SQL
 end
